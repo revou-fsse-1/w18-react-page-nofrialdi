@@ -1,4 +1,4 @@
-export const Galleries = [
+export const DataGalleries = [
   {
     id: 1,
     isLiked: false,
@@ -8,7 +8,7 @@ export const Galleries = [
   {
     id: 2,
     isLiked: false,
-    name: "The Trails",
+    name: "The River",
     imageUrl: "https://images.pexels.com/photos/15202881/pexels-photo-15202881.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
