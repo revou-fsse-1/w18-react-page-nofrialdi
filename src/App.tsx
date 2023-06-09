@@ -1,6 +1,5 @@
 import "./App.css";
 import { Header } from "./components/Header/Header";
-
 import { useState } from "react";
 import { DataGalleries } from "./data/DataGalleries";
 import { GalleryCard } from "./components/Contents/GalleryCard";
