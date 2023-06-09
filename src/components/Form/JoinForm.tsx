@@ -46,7 +46,7 @@ export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetSta
     setLastNameIsEmpty((lastNameIsEmpty) => (lastNameIsEmpty = false));
   };
 
-  const handleFormSubmit = (event: React.SyntheticEvent) => {
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!email) {
