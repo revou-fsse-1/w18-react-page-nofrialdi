@@ -1,9 +1,11 @@
 import "./App.css";
 import { Header } from "./components/Header/Header";
-import { ButtonJoin } from "./components/Button/ButtonJoin";
+
 import { useState } from "react";
 import { DataGalleries } from "./data/DataGalleries";
 import { GalleryCard } from "./components/Contents/GalleryCard";
+import JoinForm from "./components/Form/JoinForm";
+import JoinNotification from "./components/Form/JoinNotification";
 
 function App() {
   // Like
@@ -22,6 +24,12 @@ function App() {
   //search
 
   const [search, setSearch] = useState("");
+  const [isShow, setIsShow] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
+  const toggleJoinForm = () => {
+    setIsShow((isShow) => !isShow);
+  };
   // console.log(search);
   return (
     <div className="flex flex-col items-center justify-center">
@@ -38,7 +46,11 @@ function App() {
             <GalleryCard key={gallery.id} id={gallery.id} isLiked={gallery.isLiked} name={gallery.name} imageUrl={gallery.imageUrl} LikeGallery={LikeGallery} />
           ))}
       </div>
-      <ButtonJoin />
+      <button onClick={() => toggleJoinForm()} className=" mt-6 cursor-pointer border-[1px] border-grey z-0 px-6 py-1 text-md font-semibold top-[3px] right-[3px] bg-white rounded-lg hover:scale-110 duration-200">
+        Join Photo Club Membership
+      </button>
+      {isShow ? <JoinForm setIsShow={setIsShow} setIsActive={setIsActive} /> : null}
+      {isActive ? <JoinNotification setIsActive={setIsActive} isActive={isActive} /> : null}
     </div>
   );
 }
