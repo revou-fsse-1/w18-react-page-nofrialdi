@@ -1,84 +1,91 @@
 import React, { useState } from "react";
 
+// type formFields = {
+//   [key: string]: string;
+// };
+
+type formFields = Record<string, string>;
+type formFieldsError = Record<string, string | undefined>;
+
+const INITIAL_FORM_STATE = {
+  email: "",
+  fiirstName: "",
+  lastName: "",
+};
+
+const INITIAL_FORM_FIELD_ERROR = {
+  email: undefined,
+  fiirstName: undefined,
+  lastName: undefined,
+};
+
 export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetStateAction<boolean>>; setIsActive: React.Dispatch<React.SetStateAction<boolean>> }) {
-  // variables
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
-  const [emailIsEmpty, setEmailIsEmpty] = useState(false);
-  const [firstNameIsEmpty, setFirstNameIsEmpty] = useState(false);
-  const [lastNameIsEmpty, setLastNameIsEmpty] = useState(false);
-
-  // functions
   const toggleJoinForm = () => {
     props.setIsShow((isShown) => !isShown);
   };
   const toggleJoinNotification = () => {
     props.setIsActive((isActive) => !isActive);
   };
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-  const handleFirstNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(event.target.value);
-  };
-  const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(event.target.value);
+
+  const [formFields, setFormFields] = useState<formFields>(INITIAL_FORM_STATE);
+
+  const [formFieldsError, setFormFieldsError] = useState<formFieldsError>(INITIAL_FORM_FIELD_ERROR);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const field = event.target.name;
+
+    // console.log({ field });
+
+    setFormFields((prevFormFields) => {
+      const copiedFormFields = { ...prevFormFields };
+      copiedFormFields[field] = event.target.value;
+      return copiedFormFields;
+    });
   };
 
-  const showEmailError = () => {
-    setEmailIsEmpty((emailIsEmpty) => (emailIsEmpty = true));
-  };
-  const showFirstNameError = () => {
-    setFirstNameIsEmpty((firstNameIsEmpty) => (firstNameIsEmpty = true));
-  };
-  const showLastNameError = () => {
-    setLastNameIsEmpty((lastNameIsEmpty) => (lastNameIsEmpty = true));
-  };
-  const hideEmailError = () => {
-    setEmailIsEmpty((emailIsEmpty) => (emailIsEmpty = false));
-  };
-  const hideFirstNameError = () => {
-    setFirstNameIsEmpty((firstNameIsEmpty) => (firstNameIsEmpty = false));
-  };
-  const hideLastNameError = () => {
-    setLastNameIsEmpty((lastNameIsEmpty) => (lastNameIsEmpty = false));
+  const setFormFieldErrorByFieldKey = (fieldkey: string, errorMessage: string) => {
+    setFormFieldsError((prevFormFieldsError) => {
+      const copiedFormFieldsError = { ...prevFormFieldsError };
+      copiedFormFieldsError[fieldkey] = errorMessage;
+      return copiedFormFieldsError;
+    });
   };
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!email) {
-      showEmailError();
-    } else if (email) {
-      hideEmailError();
+    //reset form validation
+    setFormFieldsError(INITIAL_FORM_FIELD_ERROR);
+
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!formFields.email) {
+      setFormFieldErrorByFieldKey("email", "First Name have to be filled in");
+    } else if (!emailRegex.test(formFields.email)) {
+      setFormFieldErrorByFieldKey("email", "Please enter a valid email address");
     }
 
-    if (!firstName) {
-      showFirstNameError();
-    } else if (firstName) {
-      hideFirstNameError();
+    if (!formFields.fiirstName) {
+      setFormFieldErrorByFieldKey("fiirstName", "First Name have to be filled in");
     }
 
-    if (!lastName) {
-      showLastNameError();
-    } else if (lastName) {
-      hideLastNameError();
+    if (!formFields.lastName) {
+      setFormFieldErrorByFieldKey("lastName", "Last Name have to be filled in");
     }
 
-    if (!email || !firstName || !lastName) return;
+    // console.log("my form fields", formFields);
+
+    if (!formFields.email || !formFields.fiirstName || !formFields.lastName) return;
 
     const formData = {
-      email,
-      firstName,
-      lastName,
+      formFields,
     };
 
-    console.log(`Submitted the form with value: ${JSON.stringify(formData)}}`);
+    console.log("my form fields", formData);
     toggleJoinForm();
     toggleJoinNotification();
   };
+
+  // console.log({ formFieldsError });
 
   return (
     <div className="fixed z-50 top-0 inset-x-0 w-full h-full bg-black/70 ">
@@ -96,31 +103,49 @@ export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetSta
           </div>
 
           {/* form */}
-          <form onSubmit={handleFormSubmit} className="flex flex-col items-start">
+          <form onSubmit={handleSubmit} className="flex flex-col items-start">
             <label htmlFor="email" className="text-black text-sm">
               Email
             </label>
-            <input type="email" id="email" name="email" placeholder="Insert your email" onChange={handleEmailChange} className="bg-white px-2 py-1 mb-2 border border-gray-500 rounded-lg w-full text-black placeholder:text-sm" />
-
-            {emailIsEmpty ? <span className="text-red-600  text-sm">Invalid email</span> : null}
+            <input
+              onChange={handleInputChange}
+              value={formFields.email}
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Insert your email"
+              className="bg-white px-2 py-1 mb-2 border border-gray-500 rounded-lg w-full text-black placeholder:text-sm"
+            />
+            <span style={{ color: "red" }}>{formFieldsError.email}</span>
 
             <label htmlFor="fiirstName" className="text-black text-sm">
               First Name
             </label>
             <input
+              onChange={handleInputChange}
+              value={formFields.fiirstName}
               type="text"
-              id="firstName"
-              name="firstName"
+              id="fiirstName"
+              name="fiirstName"
               placeholder="Insert your first name"
-              onChange={handleFirstNameChange}
               className="bg-white px-2 py-1 mb-2 border border-gray-500 rounded-lg w-full text-black placeholder:text-sm"
             />
-            {firstNameIsEmpty ? <span className="text-red-600  text-sm">Invalid first name</span> : null}
+            <span style={{ color: "red" }}>{formFieldsError.fiirstName}</span>
+
             <label htmlFor="lastName" className="text-black text-sm">
               Last Name
             </label>
-            <input type="text" id="lastName" name="lastName" placeholder="Insert your last name" onChange={handleLastNameChange} className="bg-white px-2 py-1 mb-2 border border-gray-500 rounded-lg w-full text-black placeholder:text-sm" />
-            {lastNameIsEmpty ? <span className="text-red-600  text-sm">Invalid last name</span> : null}
+            <input
+              onChange={handleInputChange}
+              value={formFields.lastName}
+              type="text"
+              id="lastName"
+              name="lastName"
+              placeholder="Insert your last name"
+              className="bg-white px-2 py-1 mb-2 border border-gray-500 rounded-lg w-full text-black placeholder:text-sm"
+            />
+            <span style={{ color: "red" }}>{formFieldsError.lastName}</span>
+
             <input type="submit" value="Register Now" className="text-white font-medium w-full py-1 mt-4 rounded-lg bg-green-600 hover:cursor-pointer hover:scale-105 active:scale-100 transition-transform" />
           </form>
         </div>
