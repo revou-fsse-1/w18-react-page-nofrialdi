@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetStateAction<boolean>>; setIsActive: React.Dispatch<React.SetStateAction<boolean>> }) {
   // variables
@@ -17,13 +17,13 @@ export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetSta
   const toggleJoinNotification = () => {
     props.setIsActive((isActive) => !isActive);
   };
-  const handleEmailChange = (event) => {
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
-  const handleFirstNameChange = (event) => {
+  const handleFirstNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFirstName(event.target.value);
   };
-  const handleLastNameChange = (event) => {
+  const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(event.target.value);
   };
 
@@ -46,7 +46,7 @@ export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetSta
     setLastNameIsEmpty((lastNameIsEmpty) => (lastNameIsEmpty = false));
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (!email) {
