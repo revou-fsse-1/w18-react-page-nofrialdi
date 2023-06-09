@@ -59,7 +59,7 @@ export default function JoinForm(props: { setIsShow: React.Dispatch<React.SetSta
 
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!formFields.email) {
-      setFormFieldErrorByFieldKey("email", "First Name have to be filled in");
+      setFormFieldErrorByFieldKey("email", "Email have to be filled in");
     } else if (!emailRegex.test(formFields.email)) {
       setFormFieldErrorByFieldKey("email", "Please enter a valid email address");
     }
