@@ -1,5 +1,7 @@
 # My-Photo-Club-Gallery
 
+Website Photo club gallery is a website that aims to see the collection of photos that have been uploaded by members on this website you can search for photos, like photos which have been posted by members and you can also register as a member.
+
 ![image](assets/images/web_ss.png)
 
 ## Link Preview
