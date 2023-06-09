@@ -1,4 +1,4 @@
-# My-Photo-Gallery-Club
+# My-Photo-Club-Gallery
 
 ![image](assets/images/web_ss.png)
 
